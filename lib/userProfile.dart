@@ -40,6 +40,7 @@ class _userProfileState extends State<userProfile> {
     checkImageApi();
     Fluttertoast.showToast(msg: "pop");
   }
+  Uint8List? uint8List;
 loadingDialog loader =loadingDialog();
   List<String> poplist = ["Help", "Sign Out"];
   _launchURL() async {
@@ -279,16 +280,20 @@ Image? image1;
                                   backgroundColor: Colors.white,
                                   radius: 50.r,
                                   child: ClipOval(
-                                    child: (a == null)
+                                    child: (a == null && image1 == null) // Check if both a and image1 are null
                                         ? Icon(
-                                            Icons.perm_identity,
-                                            size: 75.sp,
-                                            color: Colors.black38,
-                                          )
-                                        : Image.file(a!,
-                                            height: 100.h,
-                                            width: 100.w,
-                                            fit: BoxFit.fill),
+                                      Icons.perm_identity,
+                                      size: 75.sp,
+                                      color: Colors.black38,
+                                    )
+                                        : (image1 != null) // Check if the image1 is not null
+                                        ? Image.memory(uint8List!) // Display the fetched image
+                                        : Image.file(
+                                      a!,
+                                      height: 100.h,
+                                      width: 100.w,
+                                      fit: BoxFit.fill,
+                                    ),
                                   )),
                             )),
                         Column(
@@ -580,13 +585,28 @@ Image? image1;
               "email":emailName,
             });
         print(req.body);
+        /// Base64 encoding is a way to encode binary data into ASCII characters
         var result=jsonDecode(req.body);
         encodedImageFromResponse=result['image'];
+        print("heloo" +encodedImageFromResponse);
         List<int> bytes=base64Decode(encodedImageFromResponse);
-        print("helo"+bytes.toString());
-        Uint8List uint8List = Uint8List.fromList(bytes);
+         uint8List = Uint8List.fromList(bytes);
+        try
+        {
+          if(bytes.isNotEmpty)
+          {
+            image1=Image.memory(uint8List!);
+          }
+        }
+        catch (e)
+    {
+      print('image exeption '+e.toString());
+    }
 
-        image1=Image.memory(uint8List);
+        print("hhhh"+ image1.toString());
+        setState(() {
+
+        });
       }
       catch(e)
     {
