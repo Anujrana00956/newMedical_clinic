@@ -311,7 +311,7 @@ child: TextField(
 
                     },
                       child:  (tempList.isEmpty)?Container():Visibility(
-                        visible: false,
+                        visible: true,
                         child: ListView.separated(physics: NeverScrollableScrollPhysics(),shrinkWrap: true,itemBuilder: (context ,index){
                           return Container(
                             padding: EdgeInsets.only(left: 13.w,right: 10.w),
@@ -568,17 +568,17 @@ padding: EdgeInsets.only(left: 22.w,right: 22.w),
                   physics: NeverScrollableScrollPhysics(),
 
 
-                  itemCount: copyName.length,
+                  itemCount: copyName.length ,
                   itemBuilder: (BuildContext context, int index) {
 
                     return      IgnorePointer(
                       ignoring: false,
                       child: GestureDetector(
                         onTap: ()async{
-                          SharedPreferences prefs=await SharedPreferences.getInstance();
+                          // SharedPreferences prefs=await SharedPreferences.getInstance();
                          bottomState.screenController.add(doctorview(backvalues:{"name":copyName[index].toString(),"pes":copyPes[index]}));
-                         prefs.setString("recentVisit", copyName[index].toString());
-                         prefs.setString("pes", copyPes[index].toString());
+                         // prefs.setString("recentVisit", copyName[index].toString());
+                         // prefs.setString("pes", copyPes[index].toString());
                         //Navigator.pushNamed(context, '11' ,arguments: {"name":Names[index],"pes":pes[index]});
                         /*PersistentNavBarNavigator.pushNewScreen(
                           context,
@@ -630,7 +630,7 @@ padding: EdgeInsets.only(left: 22.w,right: 22.w),
                                                   height: 1.h,
                                                 ),
                                                 Text(
-                                                  copyPes[index],
+                                                  pes[index],
                                                   style: GoogleFonts.lato(
                                                       fontWeight: FontWeight.w500,
                                                       fontSize: 12.sp,
