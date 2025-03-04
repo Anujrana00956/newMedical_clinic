@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -35,11 +36,11 @@ class _userProfileState extends State<userProfile> {
     super.initState();
     bottomState.onPageChange = 4;
     profiledatasave();
-    updateEmailfunction();
     updateName();
     checkImageApi();
     Fluttertoast.showToast(msg: "pop");
   }
+  Uint8List? uint8List;
 loadingDialog loader =loadingDialog();
   List<String> poplist = ["Help", "Sign Out"];
   _launchURL() async {
@@ -49,12 +50,13 @@ loadingDialog loader =loadingDialog();
       throw Exception('Could not launch $url');
     }
   }
-
+String encodedImageFromResponse="";
   File? a;
-
+Image? image1;
   String userName = "";
   String pass = "";
   String emailName = "";
+  String emailName1 = "";
   String id = "";
   String image = "";
 
@@ -278,16 +280,20 @@ loadingDialog loader =loadingDialog();
                                   backgroundColor: Colors.white,
                                   radius: 50.r,
                                   child: ClipOval(
-                                    child: (a == null)
+                                    child: (a == null && image1 == null) // Check if both a and image1 are null
                                         ? Icon(
-                                            Icons.perm_identity,
-                                            size: 75.sp,
-                                            color: Colors.black38,
-                                          )
-                                        : Image.file(a!,
-                                            height: 100.h,
-                                            width: 100.w,
-                                            fit: BoxFit.fill),
+                                      Icons.perm_identity,
+                                      size: 75.sp,
+                                      color: Colors.black38,
+                                    )
+                                        : (image1 != null) // Check if the image1 is not null
+                                        ? Image.memory(uint8List!) // Display the fetched image
+                                        : Image.file(
+                                      a!,
+                                      height: 100.h,
+                                      width: 100.w,
+                                      fit: BoxFit.fill,
+                                    ),
                                   )),
                             )),
                         Column(
@@ -494,7 +500,7 @@ loadingDialog loader =loadingDialog();
       ),
     ));
   }
-
+/// show data on profile screen after login/sign up
   profiledatasave() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     id = pref.getString('id')!;
@@ -502,6 +508,7 @@ loadingDialog loader =loadingDialog();
     emailName = pref.getString('email').toString();
     pass = pref.getString('password').toString();
     setState(() {});
+    Fluttertoast.showToast(msg: emailName);
   }
 
   logOut() async {
@@ -557,25 +564,54 @@ loadingDialog loader =loadingDialog();
     });
   }*/
 
-  updateEmailfunction() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
 
-    emailName = pref.getString('email').toString();
-    setState(() {});
-  }
 
   updateName() async {
     SharedPreferences prefaa = await SharedPreferences.getInstance();
     userName = prefaa.getString('name').toString();
     setState(() {});
   }
-
+/// image fetching api
   checkImageApi() async {
-    var req= await http.post(Uri.parse("http://192.168.0.78/dbMedical/imageditect"),
-        body: {
-          "email":emailName,
+  try
+      {
+        /// getting email form shared prefs and sending that to api to retrive associated image
+        SharedPreferences prefs=await SharedPreferences.getInstance();
+        emailName = await  prefs.getString('email').toString();
+
+        var req= await http.post(Uri.parse("http://192.168.0.78/dbMedical/imageditect.php"),
+            body: {
+
+              "email":emailName,
+            });
+        print(req.body);
+        /// Base64 encoding is a way to encode binary data into ASCII characters
+        var result=jsonDecode(req.body);
+        encodedImageFromResponse=result['image'];
+        print("heloo" +encodedImageFromResponse);
+        List<int> bytes=base64Decode(encodedImageFromResponse);
+         uint8List = Uint8List.fromList(bytes);
+        try
+        {
+          if(bytes.isNotEmpty)
+          {
+            image1=Image.memory(uint8List!);
+          }
+        }
+        catch (e)
+    {
+      print('image exeption '+e.toString());
+    }
+
+        print("hhhh"+ image1.toString());
+        setState(() {
+
         });
-    print(req.body);
+      }
+      catch(e)
+    {
+      print("Profile fetching Api try catch  "+e.toString());
+    }
   }
   imageFetch() async{
     SharedPreferences prefg=await SharedPreferences.getInstance();
