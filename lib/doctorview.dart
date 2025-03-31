@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import    'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,7 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class doctorview extends StatefulWidget {
   Map<String, String> backvalues = {};
   doctorview({super.key, required this.backvalues});
-  static int onPageChange=0;
+  static int onPageChange = 0;
 
   @override
   State<doctorview> createState() => _doctorviewState();
@@ -31,26 +31,29 @@ class _doctorviewState extends State<doctorview> {
     super.initState();
     creationOfDates();
     convertingMonthtoString();
-    bottomState.onPageChange=12;
-    print("onSubmit"+onSubmitSavedData.toString());
-
+    bottomState.onPageChange = 12;
+    print("onSubmit$onSubmitSavedData");
   }
 
-  
-
-
-
-  List<String> hospitals=["Zonal Hospital, \n Dharamshala","Civil Hospital, \n Palampur","Civil Hospital, \n Kangra"];
-  String locationSelected="";
-  List addressoflocation=["Dharamshala","Palampur","Kangra"];
+  List<String> hospitals = [
+    "Zonal Hospital, \n Dharamshala",
+    "Civil Hospital, \n Palampur",
+    "Civil Hospital, \n Kangra"
+  ];
+  String locationSelected = "";
+  List addressoflocation = ["Dharamshala", "Palampur", "Kangra"];
   GoogleMapController? _controller;
-  String addressOfSelectedlocation="";
-  List<dynamic> coordinates=[const LatLng(32.2190 ,76.3234),const LatLng(32.10781006, 76.53469797),const LatLng( 32.099804, 76.269104)];
-  LatLng selectedlats=LatLng(72.190 ,06.3234);
+  String addressOfSelectedlocation = "";
+  List<dynamic> coordinates = [
+    const LatLng(32.2190, 76.3234),
+    const LatLng(32.10781006, 76.53469797),
+    const LatLng(32.099804, 76.269104)
+  ];
+  LatLng selectedlats = const LatLng(72.190, 06.3234);
 
   String Timeselectedtime = "";
-  bool doneSlide=false;
-  bool paySlide=false;
+  bool doneSlide = false;
+  bool paySlide = false;
 
   String dateselectedDate = "";
   String monthSelected = "";
@@ -58,10 +61,10 @@ class _doctorviewState extends State<doctorview> {
   List<Color> colorsOnChane = [];
   String appointmentStatus = "Make Appointment";
   String ProceedPayment = "Proceed for Payment";
-  loadingDialog loading = loadingDialog();
+  loadingDialog loading = const loadingDialog();
 
-  static List<String> onSubmitSavedData=[];
-  Map<String,dynamic> onSubmitSavedDataMap={};
+  static List<String> onSubmitSavedData = [];
+  Map<String, dynamic> onSubmitSavedDataMap = {};
   creationOfDates() {
     for (int i = DateTime.now().day; i <= 31; i++) {
       NumberOfDays.add(i.toString());
@@ -69,7 +72,6 @@ class _doctorviewState extends State<doctorview> {
     }
     print(colorsOnChane);
   }
-
 
   bool showVisitCanceledString = false;
   bool showpayment = false;
@@ -82,11 +84,11 @@ class _doctorviewState extends State<doctorview> {
   bool showAliderArrowOnSuccessfulpayment = true;
   bool showAppointmentSlider = false;
   List<Color> appointmentTimeSelectionColors = [
-    Color(0xffFFFFFF),
-    Color(0xffFFFFFF),
-    Color(0xffFFFFFF),
-    Color(0xffFFFFFF),
-    Color(0xffFFFFFF)
+    const Color(0xffFFFFFF),
+    const Color(0xffFFFFFF),
+    const Color(0xffFFFFFF),
+    const Color(0xffFFFFFF),
+    const Color(0xffFFFFFF)
   ];
 
   DateTime currenttime = DateTime.now();
@@ -95,7 +97,7 @@ class _doctorviewState extends State<doctorview> {
   int monthInFucntion = 1;
   String monthName = "Jan";
   String years = "2024";
-  List<String> year=["2024","2025","2026"];
+  List<String> year = ["2024", "2025", "2026"];
   List<String> months = [
     "Jan",
     "Feb",
@@ -114,7 +116,7 @@ class _doctorviewState extends State<doctorview> {
   List<String> selectionTime = ["9:00", "12:00", "13:00", "16:00", "16:45"];
   void convertingMonthtoString() {
     monthInFucntion = currenttime.month;
-    monthName = months[monthInFucntion! - 1];
+    monthName = months[monthInFucntion - 1];
     setState(() {});
   }
 
@@ -122,8 +124,10 @@ class _doctorviewState extends State<doctorview> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
       child: Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Material(
@@ -131,214 +135,215 @@ class _doctorviewState extends State<doctorview> {
           color: Colors.transparent,
           child: Visibility(
             visible: showAppointmentSlider,
-            child: Container(width: MediaQuery.sizeOf(context).width*.8,
+            child: SizedBox(
+              width: MediaQuery.sizeOf(context).width * .8,
               height: 150,
               child: FloatingActionButton(
-                highlightElevation: 0,
+                  highlightElevation: 0,
                   elevation: 0,
                   splashColor: Colors.transparent,
                   backgroundColor: Colors.transparent,
-                  child:Column(
-
+                  child: Column(
                     children: [
                       Visibility(
-
                         visible: showAppointmentSlider,
                         child: Container(
-                          padding: EdgeInsets.only(right: 20, left: 20),
+                          padding: const EdgeInsets.only(right: 20, left: 20),
                           child: HorizontalSlidableButton(
-      tristate: true,
+                            tristate: true,
                             autoSlide: true,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(20)),
                             height: 60,
                             width: MediaQuery.of(context).size.width,
                             buttonWidth: 60.0,
                             color: (Makeappointment)
-                                ? Color(0xff66CA98)
+                                ? const Color(0xff66CA98)
                                 : Colors.brown.shade200,
                             dismissible: false,
                             label: Visibility(
                               visible: showAliderArrowOnSuccessfulAppointment,
-                              child: Center(
+                              child: const Center(
                                   child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.arrow_forward_ios_rounded,
-                                        color: Color(0xff676A69),
-                                      ),
-                                      Icon(
-                                        Icons.arrow_forward_ios_rounded,
-                                        color: Color(0xffFFFFFF),
-                                      ),
-                                    ],
-                                  )),
+                                children: [
+                                  Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    color: Color(0xff676A69),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    color: Color(0xffFFFFFF),
+                                  ),
+                                ],
+                              )),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: (doneSlide)?SpinKitChasingDots(size: 20,color: Colors.red,):Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.circle_rounded,
-                                      size: 8, color: Colors.white),
-                                  SizedBox(
-                                    width: 4,
-                                  ),
-                                  Text(
-                                    appointmentStatus,
-                                    style: GoogleFonts.lato(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500,
-                                        color: Color(0xffFFFFFF)),
-                                  ),
-                                ],
-                              ),
+                              child: (doneSlide)
+                                  ? const SpinKitChasingDots(
+                                      size: 20,
+                                      color: Colors.red,
+                                    )
+                                  : Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Icon(Icons.circle_rounded,
+                                            size: 8, color: Colors.white),
+                                        const SizedBox(
+                                          width: 4,
+                                        ),
+                                        Text(
+                                          appointmentStatus,
+                                          style: GoogleFonts.lato(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500,
+                                              color: const Color(0xffFFFFFF)),
+                                        ),
+                                      ],
+                                    ),
                             ),
-                            onChanged: (position)  async{
+                            onChanged: (position) async {
+                              if (position == SlidableButtonPosition.end) {
+                                appointmentStatus =
+                                    "Appointment Scheduled Successfully";
+                                showAliderArrowOnSuccessfulAppointment = false;
+                                Makeappointment = true;
+                                doneSlide = true;
+                                setState(() {});
+                              }
 
-                                if (position == SlidableButtonPosition.end) {
-                                  appointmentStatus =
-                                  "Appointment Scheduled Successfully";
-                                  showAliderArrowOnSuccessfulAppointment = false;
-                                  Makeappointment = true;
-                                  doneSlide=true;
-                                  setState((){});
+                              ///this is to actually disable the spinkit after 2 seconds of the slide button , ended slide
+                              ///
+                              await Future.delayed(const Duration(seconds: 2));
+                              HapticFeedback.heavyImpact();
+                              doneSlide = false;
+                              showpayment = true;
 
-
-
-
-
-                                }
-                                ///this is to actually disable the spinkit after 2 seconds of the slide button , ended slide
-                                ///
-                                await Future.delayed(Duration(seconds: 2));
-                                HapticFeedback.heavyImpact();
-                                doneSlide=false;
-                                showpayment=true;
-
-                                setState((){});
-
-
+                              setState(() {});
                             },
                           ),
                         ),
                       ),
-                      SizedBox(height: 10,),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       Visibility(
-
                         visible: showpayment,
                         child: Container(
-                          padding: EdgeInsets.only(right: 20, left: 20),
+                          padding: const EdgeInsets.only(right: 20, left: 20),
                           child: HorizontalSlidableButton(
                             autoSlide: true,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(20)),
                             height: 60,
                             width: MediaQuery.of(context).size.width,
                             buttonWidth: 60.0,
-                             color: (Makepayment)?Color(0xff66CA98):Colors.redAccent,
+                            color: (Makepayment)
+                                ? const Color(0xff66CA98)
+                                : Colors.redAccent,
                             dismissible: false,
                             label: Visibility(
                               visible: showAliderArrowOnSuccessfulpayment,
-                              child: Center(
+                              child: const Center(
                                   child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: Color(0xff676A69),
-                                      ),
-                                      Icon(
-                                        Icons.arrow_forward_ios_rounded,
-                                        color: Color(0xffFFFFFF),
-                                      ),
-                                    ],
-                                  )),
+                                children: [
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: Color(0xff676A69),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    color: Color(0xffFFFFFF),
+                                  ),
+                                ],
+                              )),
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: (paySlide)?SpinKitChasingDots(size: 20,color: Colors.red,):Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.circle_rounded,
-                                      size: 8, color: Colors.white),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    ProceedPayment,
-                                    style: GoogleFonts.lato(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500,
-                                        color: Color(0xffFFFFFF)),
-                                  ),
-                                ],
-                              ),
+                              child: (paySlide)
+                                  ? const SpinKitChasingDots(
+                                      size: 20,
+                                      color: Colors.red,
+                                    )
+                                  : Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        const Icon(Icons.circle_rounded,
+                                            size: 8, color: Colors.white),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          ProceedPayment,
+                                          style: GoogleFonts.lato(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w500,
+                                              color: const Color(0xffFFFFFF)),
+                                        ),
+                                      ],
+                                    ),
                             ),
-                            onChanged: (position) async{
+                            onChanged: (position) async {
                               setState(() {
                                 if (position == SlidableButtonPosition.end) {
-      paySlide=true;
-      setState((){});
+                                  paySlide = true;
+                                  setState(() {});
 
+                                  ///this is to actually disable the spinkit after 2 seconds of the slide button , ended slide
+                                  ///
 
-
-
-
-
-      ///this is to actually disable the spinkit after 2 seconds of the slide button , ended slide
-      ///
-
-
-
-
-                                  ProceedPayment =
-                                  "Please Wait....";
-      showAliderArrowOnSuccessfulpayment = false;
+                                  ProceedPayment = "Please Wait....";
+                                  showAliderArrowOnSuccessfulpayment = false;
                                   Makepayment = true;
-
-
                                 }
                               });
+
                               /// inititalxed a maop
                               ///
 
+                              onSubmitSavedDataMap = {
+                                "name": widget.backvalues['name'],
+                                "date": dateselectedDate,
+                                "month": monthName,
+                                "time": Timeselectedtime,
+                                "pes": widget.backvalues['pes']
+                              };
 
-                              onSubmitSavedDataMap={"name":widget.backvalues['name'],"date":dateselectedDate,"month":monthName,"time":Timeselectedtime,"pes":widget.backvalues['pes']};
+                              try {
+                                onSubmitSavedData
+                                    .add(jsonEncode(onSubmitSavedDataMap));
 
-                             try
-                             {
+                                print("onSubmit$onSubmitSavedData");
 
-                                 onSubmitSavedData.add(jsonEncode(onSubmitSavedDataMap))  ;
-
-                               print("onSubmit"+onSubmitSavedData.toString());
-
-                               SharedPreferences prefg= await SharedPreferences.getInstance();
-                               prefg.setStringList("date",onSubmitSavedData);
-                               List<String> abc= await prefg.getStringList("date")!;
-                               print("abc"+abc.toString());
-                             }
-                             catch (e)
-                              {
-                                print("try and catch "+e.toString());
+                                SharedPreferences prefg =
+                                    await SharedPreferences.getInstance();
+                                prefg.setStringList("date", onSubmitSavedData);
+                                List<String> abc = prefg.getStringList("date")!;
+                                print("abc$abc");
+                              } catch (e) {
+                                print("try and catch $e");
                               }
-
 
                               /*prefg.setString("month", monthName);
                               prefg.setString("time", Timeselectedtime);
                               prefg.setString("nameuser",widget.backvalues["name"]!);
                               prefg.setString("pesuser",widget.backvalues["pes"]!);*/
 
-setState(() {
+                              setState(() {});
 
-});
-
-                              await Future.delayed(Duration(seconds: 2));
+                              await Future.delayed(const Duration(seconds: 2));
                               HapticFeedback.heavyImpact();
-                              paySlide=false;
-                              showpayment=true;
+                              paySlide = false;
+                              showpayment = true;
 
-                              setState((){});
-                              Future.delayed(Duration(seconds: 3)).then((value) {
+                              setState(() {});
+                              Future.delayed(const Duration(seconds: 3))
+                                  .then((value) {
                                 Navigator.pop(context);
-                                bottomState.screenController.add(payment());
+                                bottomState.screenController
+                                    .add(const payment());
                               });
                               showDialog(
                                   context: context,
@@ -349,41 +354,37 @@ setState(() {
                           ),
                         ),
                       ),
-
                     ],
                   ),
-
-                  onPressed: (){
-
-              }),
+                  onPressed: () {}),
             ),
           ),
         ),
         body: SingleChildScrollView(
           child: Container(
             width: MediaQuery.of(context).size.width,
-            color: Color(0xffF4F6F5),
+            color: const Color(0xffF4F6F5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 //1st child..................................................................................................................
 
                 Container(
-                  padding:
-                      EdgeInsets.only(left: 26, top: 70, right: 24, bottom: 39),
+                  padding: const EdgeInsets.only(
+                      left: 26, top: 70, right: 24, bottom: 39),
                   decoration: BoxDecoration(
-                      color: Color(0xffFFFFFF),
+                      color: const Color(0xffFFFFFF),
                       borderRadius: BorderRadius.circular(50)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       GestureDetector(
                         onTap: () {
-                          bottomState.screenController.add(eight());
+                          bottomState.screenController.add(const eight());
                         },
                         child: Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.arrow_back_ios_new,
                               size: 14,
                             ),
@@ -397,7 +398,7 @@ setState(() {
                           ],
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Row(
@@ -410,7 +411,7 @@ setState(() {
                               children: [
                                 Container(
                                     decoration: BoxDecoration(
-                                        color: Color(0xffA7A6A5),
+                                        color: const Color(0xffA7A6A5),
                                         borderRadius: BorderRadius.circular(5)),
                                     child: SvgPicture.asset(
                                         "assets/logo/female-doctor-icon.svg")),
@@ -419,13 +420,13 @@ setState(() {
                                   child: Container(
                                     height: 26,
                                     width: 40,
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                         color: Color(0xffFFFFFF),
                                         borderRadius: BorderRadius.only(
                                             topRight: Radius.circular(5))),
                                     child: Row(
                                       children: [
-                                        Icon(
+                                        const Icon(
                                           Icons.star,
                                           color: Color(0xffF4A3EC),
                                           size: 16,
@@ -444,7 +445,7 @@ setState(() {
                               ],
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 8,
                           ),
                           Column(
@@ -457,15 +458,15 @@ setState(() {
                                     fontWeight: FontWeight.w800,
                                     color: Colors.black),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 2,
                               ),
                               Text(widget.backvalues["pes"]!,
                                   style: GoogleFonts.lato(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w400,
-                                      color: Color(0xffA7A6A5))),
-                              SizedBox(
+                                      color: const Color(0xffA7A6A5))),
+                              const SizedBox(
                                 height: 24,
                               ),
                               Row(
@@ -474,24 +475,26 @@ setState(() {
                                     height: 30,
                                     width: 30,
                                     decoration: BoxDecoration(
-                                        color: Color(0xff66CA98),
-                                        borderRadius: BorderRadius.circular(10)),
-                                    child: Icon(
+                                        color: const Color(0xff66CA98),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: const Icon(
                                       Icons.message,
                                       size: 20,
                                       color: Color(0xffFFFFFF),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 14,
                                   ),
                                   Container(
                                     height: 30,
                                     width: 30,
                                     decoration: BoxDecoration(
-                                        color: Color(0xff6295E2),
-                                        borderRadius: BorderRadius.circular(10)),
-                                    child: Icon(
+                                        color: const Color(0xff6295E2),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: const Icon(
                                       Icons.call,
                                       size: 20,
                                       color: Color(0xffFFFFFF),
@@ -501,10 +504,10 @@ setState(() {
                               ),
                             ],
                           ),
-                          Spacer(),
+                          const Spacer(),
                           Column(
                             children: [
-                              Row(
+                              const Row(
                                 children: [
                                   Icon(
                                     Icons.circle,
@@ -523,7 +526,7 @@ setState(() {
                                   ),
                                 ],
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 50,
                               ),
                               Text(
@@ -542,24 +545,25 @@ setState(() {
                   ),
                 ),
 
-                SizedBox(
+                const SizedBox(
                   height: 14,
                 ),
 
                 //2nd child...........................................................................................................................
 
                 Container(
-                  padding: EdgeInsets.only(left: 26, right: 26),
+                  padding: const EdgeInsets.only(left: 26, right: 26),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Visibility(
                         visible: false,
                         child: Container(
-                          padding: EdgeInsets.only(right: 26),
+                          padding: const EdgeInsets.only(right: 26),
                           child: HorizontalSlidableButton(
                             autoSlide: true,
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(20)),
                             height: 60,
                             width: MediaQuery.of(context).size.width,
                             buttonWidth: 60.0,
@@ -568,7 +572,7 @@ setState(() {
                                 : Colors.red,
                             dismissible: false,
                             label: (showVisitCanceledString)
-                                ? Center(
+                                ? const Center(
                                     child: Row(
                                     children: [
                                       Icon(
@@ -581,7 +585,7 @@ setState(() {
                                       ),
                                     ],
                                   ))
-                                : Center(
+                                : const Center(
                                     child: Row(
                                     children: [
                                       Icon(
@@ -612,7 +616,7 @@ setState(() {
                                           style: GoogleFonts.lato(
                                               fontSize: 18,
                                               fontWeight: FontWeight.w500,
-                                              color: Color(0xffFFFFFF)),
+                                              color: const Color(0xffFFFFFF)),
                                         ),
                                 ],
                               ),
@@ -634,7 +638,7 @@ setState(() {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 22,
                       ),
                       Container(
@@ -647,17 +651,18 @@ setState(() {
                                   style: GoogleFonts.lato(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
-                                      color: Color(0xffA7A6A5)),
+                                      color: const Color(0xffA7A6A5)),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 12,
                                 ),
                                 Container(
                                   height: 58,
                                   width: 107,
-                                  padding: EdgeInsets.only(top: 18, bottom: 18),
-                                  decoration:
-                                      BoxDecoration(color: Color(0xffEFF2F1)),
+                                  padding: const EdgeInsets.only(
+                                      top: 18, bottom: 18),
+                                  decoration: const BoxDecoration(
+                                      color: Color(0xffEFF2F1)),
                                   child: Text(
                                     "+423",
                                     style: GoogleFonts.lato(
@@ -669,7 +674,7 @@ setState(() {
                                 )
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             Column(
@@ -679,17 +684,18 @@ setState(() {
                                   style: GoogleFonts.lato(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
-                                      color: Color(0xffA7A6A5)),
+                                      color: const Color(0xffA7A6A5)),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 12,
                                 ),
                                 Container(
                                   height: 58,
                                   width: 107,
-                                  padding: EdgeInsets.only(top: 18, bottom: 18),
-                                  decoration:
-                                      BoxDecoration(color: Color(0xffEFF2F1)),
+                                  padding: const EdgeInsets.only(
+                                      top: 18, bottom: 18),
+                                  decoration: const BoxDecoration(
+                                      color: Color(0xffEFF2F1)),
                                   child: Text(
                                     "+8 year",
                                     style: GoogleFonts.lato(
@@ -701,7 +707,7 @@ setState(() {
                                 )
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             Column(
@@ -711,17 +717,18 @@ setState(() {
                                   style: GoogleFonts.lato(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
-                                      color: Color(0xffA7A6A5)),
+                                      color: const Color(0xffA7A6A5)),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 12,
                                 ),
                                 Container(
                                   height: 58,
                                   width: 105,
-                                  padding: EdgeInsets.only(top: 18, bottom: 18),
-                                  decoration:
-                                      BoxDecoration(color: Color(0xffEFF2F1)),
+                                  padding: const EdgeInsets.only(
+                                      top: 18, bottom: 18),
+                                  decoration: const BoxDecoration(
+                                      color: Color(0xffEFF2F1)),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -733,10 +740,10 @@ setState(() {
                                             color: Colors.black),
                                         textAlign: TextAlign.center,
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         width: 4,
                                       ),
-                                      Icon(
+                                      const Icon(
                                         Icons.star,
                                         color: Color(0xffF4A3EC),
                                         size: 16,
@@ -749,7 +756,7 @@ setState(() {
                           ],
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 29,
                       ),
                       Text(
@@ -766,23 +773,26 @@ setState(() {
                 //3rd child........................................................................................................................
 
                 Container(
-                  padding: EdgeInsets.only(left: 26),
+                  padding: const EdgeInsets.only(left: 26),
                   child: Column(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 11,
                       ),
-                      Container(
+                      SizedBox(
                         height: MediaQuery.of(context).size.height / 10,
                         child: ListView.separated(
                             scrollDirection: Axis.horizontal,
                             itemBuilder: (context, index) {
                               return GestureDetector(
-                                onTap: () async{
+                                onTap: () async {
                                   showtime = true;
-                                  for (int i = 0; i < NumberOfDays.length; i++) {
+                                  for (int i = 0;
+                                      i < NumberOfDays.length;
+                                      i++) {
                                     if (i == index) {
-                                      colorsOnChane[i] = Color(0xff66CA98);
+                                      colorsOnChane[i] =
+                                          const Color(0xff66CA98);
                                       continue;
                                     }
 
@@ -796,7 +806,7 @@ setState(() {
                                 },
                                 child: Container(
                                   width: 79,
-                                  padding: EdgeInsets.only(top: 17),
+                                  padding: const EdgeInsets.only(top: 17),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     color: colorsOnChane[index],
@@ -810,7 +820,7 @@ setState(() {
                                             fontWeight: FontWeight.w600,
                                             color: Colors.black),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 2,
                                       ),
                                       Text(
@@ -826,7 +836,7 @@ setState(() {
                               );
                             },
                             separatorBuilder: (context, index) {
-                              return SizedBox(
+                              return const SizedBox(
                                 width: 10,
                               );
                             },
@@ -838,7 +848,7 @@ setState(() {
 
                 //4rth...........................................................................................................................
 
-                SizedBox(
+                const SizedBox(
                   height: 29,
                 ),
                 Visibility(
@@ -848,7 +858,7 @@ setState(() {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          padding: EdgeInsets.only(left: 26, right: 26),
+                          padding: const EdgeInsets.only(left: 26, right: 26),
                           child: Text(
                             "Time",
                             style: GoogleFonts.lato(
@@ -857,19 +867,19 @@ setState(() {
                                 color: Colors.black),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 11,
                         ),
                         Container(
-                          padding: EdgeInsets.only(left: 26, right: 26),
+                          padding: const EdgeInsets.only(left: 26, right: 26),
                           height: 120,
                           width: MediaQuery.of(context).size.width,
                           child: GridView.builder(
-                            padding: EdgeInsets.only(top: 0),
-                            physics: NeverScrollableScrollPhysics(),
+                            padding: const EdgeInsets.only(top: 0),
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: selectionTime.length,
                             gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                               mainAxisSpacing: 10,
                               mainAxisExtent: 55,
                               crossAxisCount: 4,
@@ -883,11 +893,13 @@ setState(() {
                                   if (appointmentTimeSelectionColors[index] ==
                                       Colors.white) {
                                     for (int i = 0;
-                                        i < appointmentTimeSelectionColors.length;
+                                        i <
+                                            appointmentTimeSelectionColors
+                                                .length;
                                         i++) {
                                       if (index == i) {
                                         appointmentTimeSelectionColors[index] =
-                                            Color(0xff66CA98);
+                                            const Color(0xff66CA98);
                                       } else {
                                         appointmentTimeSelectionColors[i] =
                                             Colors.white;
@@ -908,9 +920,10 @@ setState(() {
                                     height: 42,
                                     width: 83,
                                     decoration: BoxDecoration(
-                                        color:
-                                            appointmentTimeSelectionColors[index],
-                                        borderRadius: BorderRadius.circular(10)),
+                                        color: appointmentTimeSelectionColors[
+                                            index],
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
                                     child: Center(
                                         child: Text(
                                       selectionTime[index],
@@ -929,22 +942,22 @@ setState(() {
                   ),
                 ),
 
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Container(
-                  padding: EdgeInsets.only(left: 26, right: 26),
+                  padding: const EdgeInsets.only(left: 26, right: 26),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         "About Doctor",
                         style: GoogleFonts.lato(
-            fontSize: 18,
-            fontWeight: FontWeight.w400,
-            color: Colors.black),
-      ),
-                      SizedBox(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black),
+                      ),
+                      const SizedBox(
                         height: 11,
                       ),
                       Text(
@@ -952,19 +965,19 @@ setState(() {
                         style: GoogleFonts.lato(
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
-                            color: Color(0xffA7A6A5)),
+                            color: const Color(0xffA7A6A5)),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Container(
-                  padding: EdgeInsets.only(left: 26, right: 26),
+                  padding: const EdgeInsets.only(left: 26, right: 26),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -975,103 +988,106 @@ setState(() {
                             fontWeight: FontWeight.w400,
                             color: Colors.black),
                       ),
-                      SizedBox(height: 10,),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       Visibility(
                         visible: Showlocation,
                         child: Container(
-
                           height: 60,
-                          padding: EdgeInsets.only(left: 10, right: 10),
-                          child: ListView.separated(itemCount: 3,scrollDirection: Axis.horizontal,
-                            itemBuilder: (context,index){
-                              return     GestureDetector(
-                                onTap: (
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: ListView.separated(
+                            itemCount: 3,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  showAppointmentSlider = true;
+                                  locationSelected = hospitals[index];
+                                  addressOfSelectedlocation =
+                                      addressoflocation[index];
+                                  selectedlats = coordinates[index];
+                                  _controller?.animateCamera(
+                                      CameraUpdate.newLatLng(selectedlats));
+                                  Fluttertoast.showToast(
+                                      msg: selectedlats.toString());
 
-                                    ){
-                                  showAppointmentSlider=true;
-                                  locationSelected=hospitals[index];
-                                  addressOfSelectedlocation=addressoflocation[index];
-                                  selectedlats=coordinates[index];
-                                  _controller?.animateCamera(CameraUpdate.newLatLng(selectedlats));
-                                  Fluttertoast.showToast(msg: selectedlats.toString());
-
-                                  setState(() {
-
-                                  });
+                                  setState(() {});
                                 },
                                 child: Flexible(
-                                  child:
-                                  Container(
-                                    padding: EdgeInsets.only(left: 10,right: 10,top: 10,bottom: 10),
+                                  child: Container(
+                                    padding: const EdgeInsets.only(
+                                        left: 10,
+                                        right: 10,
+                                        top: 10,
+                                        bottom: 10),
                                     height: 60,
-                                    child: Text(hospitals[index],textAlign: TextAlign.center
-                                    ),decoration: BoxDecoration(
-                                      borderRadius:BorderRadius.circular(15),
-                                      color: Colors.grey.shade300
-                                  ),),
-
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        color: Colors.grey.shade300),
+                                    child: Text(hospitals[index],
+                                        textAlign: TextAlign.center),
+                                  ),
                                 ),
                               );
-                            }, separatorBuilder: (BuildContext context, int index) { return SizedBox(width: 10,); },),
+                            },
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              return const SizedBox(
+                                width: 10,
+                              );
+                            },
+                          ),
                         ),
                       ),
-
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
-
-
                       Visibility(
                         visible: showAppointmentSlider,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.location_on_outlined,
                               color: Colors.black,
                               size: 24,
                             ),
-                            Text(  addressOfSelectedlocation
-                            ),
-                            SizedBox(
+                            Text(addressOfSelectedlocation),
+                            const SizedBox(
                               width: 6,
                             ),
-                            Column(
+                            const Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-
-                              ],
+                              children: [],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 30,
                             ),
-                            Icon(
+                            const Icon(
                               Icons.local_hospital_sharp,
                               color: Colors.black,
                               size: 24,
                             ),
                             Text(locationSelected),
-
-                            SizedBox(
+                            const SizedBox(
                               width: 6,
                             ),
-
-
                           ],
                         ),
                       ),
-                      SizedBox(height: 50,),
-                      Container(
+                      const SizedBox(
+                        height: 50,
+                      ),
+                      SizedBox(
                         height: 300,
                         width: double.infinity,
                         child: GoogleMap(
-                          onMapCreated: (controller){
-                            _controller=controller;
+                          onMapCreated: (controller) {
+                            _controller = controller;
                           },
                           myLocationEnabled: true,
-
-
                           mapType: MapType.terrain,
                           initialCameraPosition: CameraPosition(
                             target: selectedlats,
@@ -1079,7 +1095,7 @@ setState(() {
                           ),
                           markers: {
                             Marker(
-                              markerId: MarkerId('India'),
+                              markerId: const MarkerId('India'),
                               position: selectedlats,
                             )
                           },
@@ -1095,6 +1111,4 @@ setState(() {
       ),
     );
   }
-
-  
 }
